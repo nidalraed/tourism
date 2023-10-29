@@ -5,7 +5,7 @@ const backgroundImageStyle = {
   background: `url("https://i0.wp.com/blog.globaltribes.io/wp-content/uploads/2023/01/%D8%AF%D9%84%D9%8A%D9%84%D9%83-%D8%A7%D9%84%D8%B4%D8%A7%D9%85%D9%84-%D9%85%D9%86-%D8%A3%D8%AC%D9%84-%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%AD%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D8%A3%D8%B1%D8%AF%D9%86.webp?fit=1200%2C700&ssl=1")`,
   backgroundSize: '100vw',
   backgroundPosition: 'center',
-  height: '80vh',
+  height: '90vh',
   backgroundRepeat: 'no-repeat',
 };
 

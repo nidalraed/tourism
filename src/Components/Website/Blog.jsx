@@ -1,111 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
-// Sample blog data (replace with your actual data)
-const blogs = [
-  {
-    id: 1,
-    name: 'Tourism in Petra',
-    author: 'Nidal',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Petra_%2C_Al-Khazneh_2.jpg/2238px-Petra_%2C_Al-Khazneh_2.jpg',
-  },
-  {
-    id: 2,
-    name: 'Tourism in Wadi Rum',
-    author: 'Nedal Raed',
-    imageUrl: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/322485119.jpg?k=586d63904a541e2f3f4540be3ce42f8007ec150c26e0c2964006bb9d7e57ec7b&o=&hp=1',
-  },
-  {
-    id: 3,
-    name: 'Tourism in the Roman amphitheater',
-    author: 'Nedal',
-    imageUrl: 'https://www.jdfshops.com/sites/default/files/2019-11/dbac1e25-0ac2-47c3-add6-aa9d4d1a4312.png',
-  },
-  {
-    id: 4,
-    name: 'Tourism in Petra',
-    author: 'Nidal',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Petra_%2C_Al-Khazneh_2.jpg/2238px-Petra_%2C_Al-Khazneh_2.jpg',
-  },
-  {
-    id: 5,
-    name: 'Tourism in Wadi Rum',
-    author: 'Nedal Raed',
-    imageUrl: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/322485119.jpg?k=586d63904a541e2f3f4540be3ce42f8007ec150c26e0c2964006bb9d7e57ec7b&o=&hp=1',
-  },
-  {
-    id: 6,
-    name: 'Tourism in the Roman amphitheater',
-    author: 'Nedal',
-    imageUrl: 'https://www.jdfshops.com/sites/default/files/2019-11/dbac1e25-0ac2-47c3-add6-aa9d4d1a4312.png',
-  },
-  {
-    id: 7,
-    name: 'Tourism in Petra',
-    author: 'Nidal',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Petra_%2C_Al-Khazneh_2.jpg/2238px-Petra_%2C_Al-Khazneh_2.jpg',
-  },
-  {
-    id: 8,
-    name: 'Tourism in Wadi Rum',
-    author: 'Nedal Raed',
-    imageUrl: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/322485119.jpg?k=586d63904a541e2f3f4540be3ce42f8007ec150c26e0c2964006bb9d7e57ec7b&o=&hp=1',
-  },
-  {
-    id: 9,
-    name: 'Tourism in the Roman amphitheater',
-    author: 'Nedal',
-    imageUrl: 'https://www.jdfshops.com/sites/default/files/2019-11/dbac1e25-0ac2-47c3-add6-aa9d4d1a4312.png',
-  },
-  // Add more blog objects as needed
-];
-
-const itemsPerPage = 6; // Number of blogs to show per page
-
-function Blogs() {
+const Blogs = () => {
+  const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const blogsPerPage = 8;
 
-  // Calculate the index of the first and last item to display on the current page
-  const indexOfLastBlog = currentPage * itemsPerPage;
-  const indexOfFirstBlog = indexOfLastBlog - itemsPerPage;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
+        setBlogs(response.data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+  }, []); 
+
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div>
-      <section className="bg-white dark:bg-gray-900">
-        <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:py-16 lg:grid-cols-1">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-            {currentBlogs.map((blog) => (
-              <div key={blog.id} className="max-w-md mx-auto rounded-lg shadow-md overflow-hidden dark:bg-gray-800">
-                <img src={blog.imageUrl} alt={blog.name} className="w-full h-64 object-cover object-center" />
-                <div className="p-6">
-                  <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">{blog.name}</h2>
-                  <p className="text-gray-600 dark:text-gray-400">Author: {blog.author}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {currentBlogs.map((blog) => (
+        <div key={blog.id} className="bg-white rounded-md p-4 shadow-lg">
+          <img src={`https://via.placeholder.com/150`} alt={blog.title} className="w-full h-32 object-cover mb-4 rounded-md" />
+          <h2 className="text-xl font-semibold mb-2">{blog.title}</h2>
+          <p className="text-blue-950 mb-4">{blog.body}</p>
+          <Link to={`/blog/${blog.id}`} className="text-blue-950 hover:underline">
+            More Details
+          </Link>
         </div>
-      </section>
-
-      <div className="flex justify-center my-4">
-        {[...Array(Math.ceil(blogs.length / itemsPerPage)).keys()].map((number) => (
+      ))}
+      <div className="col-span-full flex justify-center mt-4">
+        {Array.from({ length: Math.ceil(blogs.length / blogsPerPage) }, (_, index) => index + 1).map((number) => (
           <button
             key={number}
-            onClick={() => paginate(number + 1)}
-            className={`mx-1 px-3 py-2 rounded-lg bg-green-500 text-white hover:bg-green-700 ${
-              currentPage === number + 1 ? 'bg-green-700' : ''
+            onClick={() => paginate(number)}
+            className={`mx-2 p-2 bg-green-600 text-white hover:bg-green-800 focus:outline-none ${
+              currentPage === number ? "bg-blue-600" : ""
             }`}
+            style={{ width: "40px", height: "40px", borderRadius: "50%" }}
           >
-            {number + 1}
+            {number}
           </button>
         ))}
       </div>
     </div>
   );
-}
+};
 
 export default Blogs;

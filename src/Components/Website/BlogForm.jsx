@@ -20,7 +20,7 @@ function BlogForm() {
       formData.append('author', author);
       formData.append('imageUrl', imageUrl); 
 
-      const response = await Axios.post('/api/createBlog', formData, {
+      const response = await Axios.post('/http://127.0.0.1:3000/blog', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -79,7 +79,7 @@ function BlogForm() {
             onChange={(e) => setImageUrl(e.target.value)}
           />
         </div>
-        <button type="submit">Submit Blog</button>
+        <button onSubmit={handleFormSubmit} type="submit">Submit Blog</button>
         {successMessage && <div className="success-message">{successMessage}</div>}
         {errorMessage && <div className="error-message">{errorMessage}</div>}
       </form>
